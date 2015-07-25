@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    android:orientation="vertical" 
+    android:id="@+id/status_layout"
+    >
+
+ <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:gravity="center_horizontal"
+          android:orientation="horizontal" >
+    
+      <ImageView
+          android:id="@+id/boiler_View"
+          android:layout_width="90dp"
+          android:layout_height="90dp"
+         android:layout_margin="10dp"
+          android:src="@drawable/boiler_off" />
+
+    <ImageView
+        android:id="@+id/garageView"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_margin="10dp"
+        android:src="@drawable/house_armed" />
+
+ </LinearLayout>
+    
+ 
+     
+</LinearLayout>

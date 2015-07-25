@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/settings" >
+
+    <EditTextPreference
+        android:key="add_new_book_title"
+        android:summary="@string/add_new_book_summary"
+        android:title="@string/add_new_book_title" />
+
+    <ListPreference
+        android:defaultValue="4"
+        android:entries="@array/rating_names"
+        android:entryValues="@array/rating_values"
+        android:key="default_rating"
+        android:summary="@string/default_rating_summary"
+        android:title="@string/default_rating_title" />
+
+    <PreferenceCategory android:title="@string/ordering" >
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/order_by_names"
+            android:entryValues="@array/order_by_values"
+            android:key="order_by"
+            android:title="@string/order_by_title" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="desc"
+            android:summaryOff="@string/desc_off"
+            android:summaryOn="@string/desc_on"
+            android:title="@string/desc" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

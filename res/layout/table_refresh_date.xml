@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="right"
+    android:background="@color/black">
+
+    <TextView android:id="@+id/row_refresh_date"
+    android:textSize="12sp"
+    android:textColor="#c0caff"
+    android:textAlignment="viewEnd"
+    android:layout_gravity="right"
+    android:textStyle="italic"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"/>
+     
+</TableRow>

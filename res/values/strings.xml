@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">House Control</string>
+    <string name="app_version_detail">Verze 1.2 20/6/2013 s 5 fragmenty a doplnenou showError</string>
+    <string name="settings">Settings</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_refresh">Refresh</string>
+
+    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_control">Control</string>
+    <string name="title_activity_main">Household Control</string>
+    
+    <string name="title_control">Ovladani</string>
+    <string name="title_status">Status</string>    
+    <string name="title_zaluzie">Zaluzie</string>
+    <string name="title_waterlevel">Destova jimka</string>
+    <string name="title_temperature">Teplota</string>
+
+    <string name="domain">Domain</string>
+    <string name="port">Port</string>
+    <string name="dir">Dir</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+	<string name="autoconfig">Autoconfiguration</string>
+    
+    <string name="settings_saved">Settings saved.</string>
+
+    <string name="btn_Save">Save</string>
+    <string name="btn_Cancel">Cancel</string>
+
+</resources>
