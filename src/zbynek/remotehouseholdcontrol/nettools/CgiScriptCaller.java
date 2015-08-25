@@ -32,7 +32,7 @@ public class CgiScriptCaller {
 	public boolean callCGIScriptPulse(int Device) throws IOException {
 		String urlString = cm.constructUrl(scriptNamePulse) + "?device=" + Device;	
 		String scriptOutput = UrlReader.readOutputFromUrl(cm, urlString);
-		return "OK".equals(scriptOutput.trim());
+    return scriptOutput != null && scriptOutput.contains("OK/");
 	}
 	/**
 	 * Calls a CGI script and returns true if it finished successfully (returns "0")
