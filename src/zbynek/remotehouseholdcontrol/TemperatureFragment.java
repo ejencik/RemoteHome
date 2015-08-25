@@ -1,9 +1,5 @@
 package zbynek.remotehouseholdcontrol;
 
-import java.lang.ref.WeakReference;
-import java.util.Map;
-
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
-
+import java.lang.ref.WeakReference;
 
 public class TemperatureFragment extends Fragment {
   private static final String[] SECTIONS = {"OUT","NP1","NP2","ENV"};

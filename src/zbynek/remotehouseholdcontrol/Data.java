@@ -21,13 +21,13 @@ public class Data {
 	private static final AtomicReference<SimpleArrayMap<String, String>> d
 	  = new AtomicReference<SimpleArrayMap<String,String>>();
 	
-	private static final AtomicReference<Handler> onDownload = new AtomicReference<Handler>();
+	private static final SimpleArrayMap<Class, Handler> onDownload =
+    new SimpleArrayMap<Class, Handler>();
 	
 	public static void setMap(SimpleArrayMap<String, String> m) {
 		d.set(m);
-		Handler h = onDownload.get();
-		if (h != null)
-			h.sendEmptyMessage(MSG_DOWNLOADED);
+    for (int i = 0; i < onDownload.size(); i++)
+      onDownload.valueAt(i).sendEmptyMessage(MSG_DOWNLOADED);
 	}
 	
 	public static SimpleArrayMap<String, String> get() {
@@ -39,7 +39,7 @@ public class Data {
 	}
 	
 	public static void setOnDownload(Handler h) {
-		onDownload.set(h);
+		onDownload.put(h.getClass(), h);
 		if (isLoaded())
 			h.sendEmptyMessage(MSG_DOWNLOADED);
 	}

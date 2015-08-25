@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="env_garaz_vrata">ENV_Garáž_vrata</string>
+  <string name="env_vetrani">ENV_Větrání</string>
+  <string name="env_boiler">ENV_Boiler</string>
+  <string name="status_close">Close</string>
+  <string name="status_on">On</string>
+  <string name="status_off">Off</string>
+</resources>
