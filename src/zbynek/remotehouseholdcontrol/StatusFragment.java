@@ -1,67 +1,81 @@
 package zbynek.remotehouseholdcontrol;
 
-import java.io.IOException;
-
-import org.xmlpull.v1.XmlPullParserException;
-
-import zbynek.remotehouseholdcontrol.nettools.CgiScriptCaller;
-import zbynek.remotehouseholdcontrol.nettools.ConnectionCredentialsManager;
-import zbynek.remotehouseholdcontrol.nettools.StatusesXmlParser;
-import zbynek.remotehouseholdcontrol.nettools.UrlReader;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.SimpleArrayMap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TableLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Toast;
+
+import java.lang.ref.WeakReference;
 
 public class StatusFragment extends Fragment {
 
-	private LinearLayout linlayout;
-	private LayoutInflater inflater;
-	ImageView image;
+  private LinearLayout layout;
+  private LayoutInflater inflater;
+  private OnDownload onDownload = new OnDownload(this);
 
-	@Override 
-	public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
-			  View v = i.inflate(R.layout.status_fragment_layout, container, false);
-			  linlayout = (LinearLayout)v.findViewById(R.id.status_layout);
-			  inflater = i;
-			  return v;
-			}
-	
-	@Override
-	public void onResume() {
-		super.onResume();
-		
-		View garage_image_view = inflater.inflate(R.layout.status_fragment_layout, null); 
-		
-		SimpleArrayMap<String, String> m = Data.get();
-		if (m != null) {
+  @Override
+  public View onCreateView(LayoutInflater i, ViewGroup container,
+    Bundle savedInstanceState) {
+    View v = i.inflate(R.layout.status_fragment_layout, container, false);
+    layout = (LinearLayout) v.findViewById(R.id.status_layout);
+    inflater = i;
+    Data.setOnDownload(onDownload);
+    return v;
+  }
 
- 	//	    ((ImageView)garage_image_view.findViewById(R.id.boiler_View )).setImageResource(
-		//    		"On".equals(m.get("ENV_Boiler")) ?	R.drawable.boiler_on : R.drawable.boiler_off);    	
+  @Override
+  public void onResume() {
+    super.onResume();
+    Data.setOnDownload(onDownload);
+  }
 
- 		   ((ImageView)garage_image_view.findViewById(R.id.garageView)).setImageResource(
-		    		"Close".equals(m.get("ENV_Garáž_vrata")) ?	R.drawable.garage_open : R.drawable.garage_open);    	
- 		  Toast.makeText(getActivity(),m.get("ENV_Garáž_vrata"), Toast.LENGTH_LONG).show();	
- 		  
- /*		    ((ImageView)garage_image_view.findViewById(R.id.Heating_View)).setImageResource(
-		    		"On".equals(m.get("ENV_Vìtrání")) ?	R.drawable.garage_open : R.drawable.garage_closed);    	
-	*/	}
-		
-	//	((ImageView)garage_image_view.findViewById(R.id.garageView)).setImageResource(R.drawable.garage_open);    	
-		linlayout.removeAllViewsInLayout();
-		linlayout.addView(garage_image_view);
+  protected void updateView() {
+    View frag = inflater.inflate(R.layout.status_fragment_layout, null);
+    SimpleArrayMap<String, String> m = Data.get();
+    if (m != null) {
+      String v = m.get(getString(R.string.env_garaz_vrata));
+      if (v != null) {
+        Toast.makeText(getActivity(), v, Toast.LENGTH_LONG).show();
+        ImageView g = (ImageView) frag.findViewById(R.id.garageView);
+        g.setImageResource(v.trim().equals(getString(R.string.status_close))
+          ? R.drawable.garage_closed
+          : R.drawable.garage_open);
+      }
 
-		//linlayout.setBackgroundColor(0xff000000);
-	}
+      v = m.get(getString(R.string.env_boiler));
+      if (v != null) {
+        ImageView img = (ImageView) frag.findViewById(R.id.boiler_View);
+        img.setImageResource(v.trim().equals(getString(R.string.status_off))
+          ? R.drawable.boiler_off
+          : R.drawable.boiler_on);
+      }
+    }
+    layout.removeAllViewsInLayout();
+    layout.addView(frag);
+  }
 
-	
+  private static class OnDownload extends Handler {
+    private final WeakReference<StatusFragment> frag;
+
+    private OnDownload(StatusFragment frag) {
+      this.frag = new WeakReference<StatusFragment>(frag);
+    }
+
+    @Override
+    public void handleMessage(Message msg) {
+      if (msg.what == Data.MSG_DOWNLOADED) {
+        StatusFragment f = frag.get();
+        if (f != null)
+          f.updateView();
+      }
+    }
+  }
 
 }

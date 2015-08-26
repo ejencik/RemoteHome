@@ -1,7 +1,5 @@
 package zbynek.remotehouseholdcontrol;
 
-import java.lang.ref.WeakReference;
-
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -13,9 +11,10 @@ import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
-
+import java.lang.ref.WeakReference;
 
 public class TemperatureFragment extends Fragment {
+  private static final String[] SECTIONS = {"OUT","NP1","NP2","ENV"};
 
 	private TableLayout table;
 	private LayoutInflater inflater;
@@ -36,35 +35,34 @@ public class TemperatureFragment extends Fragment {
 		super.onResume();
 		Data.setOnDownload(h);
 	}
-	
+
 	protected void displayData(SimpleArrayMap<String, String> m) {
-	//  OPRAVIT TU CUNARNU
-		    	for (int i = 0; i < m.size(); i++) {
-		    		if (m.keyAt(i).equals("date"))
-		    		{
-			    View refresh_time = inflater.inflate(R.layout.table_refresh_date, null); 
-			    ((TextView)refresh_time.findViewById(R.id.row_refresh_date)).setText("Last update "+m.valueAt(i));
-			    table.addView(refresh_time);
-		    	}}
-		    	
-				String[] myStringArray = {"OUT","NP1","NP2","ENV"};
-				for(int j=0; j<(myStringArray.length); j++ ) {
-			    View head = inflater.inflate(R.layout.table_row_header, null); 
-			    ((TextView)head.findViewById(R.id.row_key)).setText(myStringArray[j]);
-			    table.addView(head);
-			    		    
-			    	for (int i = 0; i < m.size(); i++) {
-			    		View row = inflater.inflate(R.layout.table_row_status, null); 
-			    
-			    		((TextView)row.findViewById(R.id.row_key)).setText(m.keyAt(i).substring(4));
-			    		((TextView)row.findViewById(R.id.row_val)).setText(m.valueAt(i));
-			    		if (m.keyAt(i).substring(0, 3).equals(myStringArray[j]))
-			    			table.addView(row);
-			    	}
-			  }
-				table.setBackgroundColor(0xff000000);
-			}
-	
+    if (m.isEmpty())
+      return;
+    table.removeAllViews();
+    String date = m.get("date");
+    if (date != null) {
+      View refresh_time = inflater.inflate(R.layout.table_refresh_date, null);
+      ((TextView)refresh_time.findViewById(R.id.row_refresh_date))
+        .setText("Last update " + date);
+      table.addView(refresh_time);
+    }
+    for (String section : SECTIONS) {
+      View head = inflater.inflate(R.layout.table_row_header, null);
+      ((TextView)head.findViewById(R.id.row_key)).setText(section);
+      table.addView(head);
+      for (int i = 0; i < m.size(); i++)
+        if (m.keyAt(i).startsWith(section)) {
+          View row = inflater.inflate(R.layout.table_row_status, null);
+          ((TextView)row.findViewById(R.id.row_key)).setText(m.keyAt(i)
+            .substring(4));
+          ((TextView)row.findViewById(R.id.row_val)).setText(m.valueAt(i));
+          table.addView(row);
+        }
+    }
+    table.setBackgroundColor(0xff000000);
+  }
+
 	private static class HandleDownload extends Handler {
 
 		private final WeakReference<TemperatureFragment> frag;
