@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <integer name="rele_branka">1</integer>  
+  <integer name="rele_branka">14</integer>  
   <integer name="rele_garaz">2</integer>  
   <integer name="rele_vrata">3</integer>  
-</resources>
+  <integer name="rele_bell">9</integer>  
+  <integer name="rele_sauna">1</integer>  
+  <integer name="rele_test">1</integer>  
+  <integer name="sensor_OUT_temp">6</integer>  
+  </resources>

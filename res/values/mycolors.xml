@@ -7,4 +7,5 @@
 <color name="button_background">#cdc8b1</color>
 <color name="button_color">#F4FC11</color>
 <color name="button_shadow">#cdaf95</color>
+<color name="transparent_background">#00FF0000</color>
 </resources>

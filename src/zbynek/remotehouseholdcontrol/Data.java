@@ -3,26 +3,20 @@ package zbynek.remotehouseholdcontrol;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.xmlpull.v1.XmlPullParserException;
-
 import zbynek.remotehouseholdcontrol.nettools.ConnectionCredentialsManager;
-import zbynek.remotehouseholdcontrol.nettools.StatusesXmlParser;
-import zbynek.remotehouseholdcontrol.nettools.UrlReader;
+import zbynek.remotehouseholdcontrol.nettools.CgiScriptCaller;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v4.util.SimpleArrayMap;
 
 public class Data {
-	private static final String XML_STATES_FILE = "stavsenzoru.xml";
 
 	public static final int MSG_DOWNLOADED = 1;
 	
-	private static final AtomicReference<SimpleArrayMap<String, String>> d
-	  = new AtomicReference<SimpleArrayMap<String,String>>();
+	private static final AtomicReference<SimpleArrayMap<String, String>> d= new AtomicReference<SimpleArrayMap<String,String>>();
 	
-	private static final SimpleArrayMap<Class, Handler> onDownload =
-    new SimpleArrayMap<Class, Handler>();
+	private static final SimpleArrayMap<Class, Handler> onDownload =new SimpleArrayMap<Class, Handler>();
 	
 	public static void setMap(SimpleArrayMap<String, String> m) {
 		d.set(m);
@@ -55,21 +49,16 @@ public class Data {
 		protected Boolean doInBackground(Context... args) {
 			Context ctx = args[0];
 			ConnectionCredentialsManager cm = new ConnectionCredentialsManager(ctx);
-			String url = cm.constructUrl(XML_STATES_FILE);
+			CgiScriptCaller scriptCaller = new CgiScriptCaller(cm);
 			try {
-				String xml = UrlReader.readOutputFromUrl(cm, url);
-				setMap(StatusesXmlParser.parseXml(xml));
+				 scriptCaller.callCGIScriptAndGetStatus(1);
 				return true;
 			} catch (IOException e) {
-				SimpleArrayMap<String, String> m = new SimpleArrayMap<String, String>();
-				m.put("Error", "Neprectu XML.\n Zkontrolujte pripojeni a nastaveni.");
-				setMap(m);
+			// TZ	SimpleArrayMap<String, String> m = new SimpleArrayMap<String, String>();
+			// TZ	m.put("Error", "Neprectu XML.\n Zkontrolujte pripojeni a nastaveni.");
+				// TZ	setMap(m);
 				return false;
-			} catch (XmlPullParserException e) {
-				SimpleArrayMap<String, String> m = new SimpleArrayMap<String, String>();
-				setMap(m);
-				return false;
-			}
+			} 
 		}
 	}
 }

@@ -24,11 +24,9 @@ public class SwipeActivity extends FragmentActivity {
 	
 		Data.download(this);
 
-		
-		
 		// Create the adapter that will return a fragment for the overview or control
 		OverviewAndControlAdapter fragmentPagerAdapter = 
-				new OverviewAndControlAdapter(getSupportFragmentManager());
+		new OverviewAndControlAdapter(getSupportFragmentManager());
 
 		// Set up the ViewPager with the sections adapter.
 		viewPager = (ViewPager) findViewById(R.id.pager);
@@ -79,9 +77,15 @@ public class SwipeActivity extends FragmentActivity {
 			case 2:
 				return new  ControlFragment();			
 			case 3:
-				return new ZaluzieFragment();			
+				return new SaunaFragment();			
 			case 4:
-				return new WaterLevelFragment();			
+				return new ZaluzieFragment();			
+			case 5:
+				return new GraphFragment();			
+			case 6:
+				return new DataFragment();			
+			case 7:
+				return new ListFragment();			
 
 			}
 			return null;
@@ -91,7 +95,7 @@ public class SwipeActivity extends FragmentActivity {
 		@Override
 		public int getCount() {
 			// Show total pages.
-			return 5;
+			return 8;
 		}
 
 		@Override
@@ -107,10 +111,20 @@ public class SwipeActivity extends FragmentActivity {
 				return getString(R.string.title_control);
 
 			case 3:
+				return getString(R.string.title_sauna);
+
+			case 4:
 				return getString(R.string.title_zaluzie);	
 			
-			case 4:
-				return getString(R.string.title_waterlevel);
+			case 5:
+				return getString(R.string.title_graph);
+
+			case 6:
+				return getString(R.string.title_data);
+
+			case 7:
+				return getString(R.string.title_list);
+
 			}
 			return null;
 		}

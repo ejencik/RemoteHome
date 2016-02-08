@@ -10,8 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
-
 import java.lang.ref.WeakReference;
 
 public class StatusFragment extends Fragment {
@@ -40,22 +38,52 @@ public class StatusFragment extends Fragment {
     View frag = inflater.inflate(R.layout.status_fragment_layout, null);
     SimpleArrayMap<String, String> m = Data.get();
     if (m != null) {
-      String v = m.get(getString(R.string.env_garaz_vrata));
+
+		ImageView img_g = (ImageView) frag.findViewById(R.id.garageView);
+    	String v = m.get(getString(R.string.env_garaz_vrata));
+    	if (v != null) {
+    			//   Toast.makeText(getActivity(), v, Toast.LENGTH_LONG).show();
+    		img_g.setImageResource(v.trim().equals(getString(R.string.status_close))
+    			? R.drawable.garage_closed
+    			: R.drawable.garage_open);
+    	} else {
+            img_g.setImageResource(R.drawable.garage_unknown);
+    	}
+
+		ImageView img_b = (ImageView) frag.findViewById(R.id.boiler_View);
+    	v = m.get(getString(R.string.env_boiler));
+    	if (v != null) {
+    			//   Toast.makeText(getActivity(), v, Toast.LENGTH_LONG).show();
+    		img_b.setImageResource(v.trim().equals(getString(R.string.status_off))
+    			? R.drawable.boiler_off
+    			: R.drawable.boiler_on);
+    	} else {
+            img_b.setImageResource(R.drawable.boiler_unknown);
+    	}
+
+      v = m.get(getString(R.string.env_house_armed));
       if (v != null) {
-        Toast.makeText(getActivity(), v, Toast.LENGTH_LONG).show();
-        ImageView g = (ImageView) frag.findViewById(R.id.garageView);
-        g.setImageResource(v.trim().equals(getString(R.string.status_close))
-          ? R.drawable.garage_closed
-          : R.drawable.garage_open);
+        ImageView img = (ImageView) frag.findViewById(R.id.houseprotect_View);
+        img.setImageResource(v.trim().equals(getString(R.string.status_Armed))
+          ? R.drawable.house_armed
+          : R.drawable.house_unarmed);
       }
 
-      v = m.get(getString(R.string.env_boiler));
+      v = m.get(getString(R.string.env_tarif));
       if (v != null) {
-        ImageView img = (ImageView) frag.findViewById(R.id.boiler_View);
-        img.setImageResource(v.trim().equals(getString(R.string.status_off))
-          ? R.drawable.boiler_off
-          : R.drawable.boiler_on);
+        ImageView img = (ImageView) frag.findViewById(R.id.tarif_View);
+        img.setImageResource(v.trim().equals(getString(R.string.status_low))
+          ? R.drawable.tarif_low
+          : R.drawable.tarif_high);
       }
+      
+      v = m.get(getString(R.string.inf_kotel_voda));
+      if (v != null) {
+        ImageView img = (ImageView) frag.findViewById(R.id.Kotel_Voda_View);
+        if (v.trim().equals(getString(R.string.status_low)))         	
+        img.setImageResource(R.drawable.water_level);
+      }
+      
     }
     layout.removeAllViewsInLayout();
     layout.addView(frag);

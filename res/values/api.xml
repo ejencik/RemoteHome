@@ -1,9 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="env_garaz_vrata">ENV_Garáž_vrata</string>
-  <string name="env_vetrani">ENV_Větrání</string>
-  <string name="env_boiler">ENV_Boiler</string>
+  <string name="env_garaz_vrata">INF_Garáž_vrata</string>
+  <string name="env_vetrani">INF_Větrání</string>
+  <string name="env_boiler">INF_Boiler</string>  
+  <string name="env_kotel">INF_Kotel</string>  
+  <string name="env_tarif">INF_TM_tarif</string>
+  <string name="temp_sauna">NP2_Chodba</string>  
+  <string name="HDO">HDO</string>  
+  <string name="env_house_armed">INF_Dum_armed</string>
+  <string name="inf_kotel_voda">INF_Kotel_voda</string>
+  
+  <string name="P3">P3</string>
+  <string name="P5">P5</string>
+    
+  <string name="status_Armed">Armed</string>
+  <string name="status_UnArmed">Unarmed</string>
+  <string name="status_low">Low</string>
+  <string name="status_High">High</string>
+  <string name="status_open">Open</string>
   <string name="status_close">Close</string>
   <string name="status_on">On</string>
-  <string name="status_off">Off</string>
+  <string name="status_off">Off</string>  
+  
+  <string name="scriptNamePulse">pulse.cgi</string>
+  <string name="scriptNameSwitch">switch.cgi</string>
+  <string name="scriptNameStatus">status.cgi</string>
+
 </resources>

@@ -1,21 +1,13 @@
 package zbynek.remotehouseholdcontrol.nettools;
 
-import java.util.List;
-
+import android.R;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiInfo;
-import android.net.wifi.ScanResult;
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Bundle;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
+
+
+import java.lang.Enum;
 
 
 public class ConnectionCredentialsManager {
@@ -27,6 +19,8 @@ public class ConnectionCredentialsManager {
 	private static final String DIR = "dir";
 	private static final String PORT = "port";
 	private static final String DOMAIN = "domain";
+	private static final String AUTOCONFIG = "autoconfig";
+
 
 	private SharedPreferences sharedPref;
 	
@@ -34,14 +28,17 @@ public class ConnectionCredentialsManager {
 		sharedPref = context.getSharedPreferences("ConnectionPreferences", Context.MODE_PRIVATE);
 	}
 	
-	public void saveCredentials(String domain, String port, String dir, String username, String password) {
-		
+//	public void saveCredentials(String domain, String port, String dir, String username, 
+	//		String password, Boolean autoconfig) 
+	public void saveCredentials(String domain, String port, String dir, String username, String password) 
+	{		
 		SharedPreferences.Editor editor = sharedPref.edit();
 		editor.putString(DOMAIN, domain);
 		editor.putString(PORT, port);
 		editor.putString(DIR, dir);
 		editor.putString(USERNAME, username);
 		editor.putString(PASSWORD, password);
+		editor.putBoolean(AUTOCONFIG, true);
 		editor.commit();	
 	}
 	
@@ -50,11 +47,11 @@ public class ConnectionCredentialsManager {
 	}
 	
 	public String getPort() {
-		return sharedPref.getString(PORT, "80");		
+		return sharedPref.getString(PORT, "8081");		
 	}
 
 	public String getDir() {
-		return sharedPref.getString(DIR, "");		
+		return sharedPref.getString(DIR, "/intranet/xml");		
 	}
 
 	public String getUsername() {
@@ -65,10 +62,32 @@ public class ConnectionCredentialsManager {
 		return sharedPref.getString(PASSWORD, "");		
 	}
 	
-	public String constructUrl(String file) {
-	     		   	  
-		return HTTP_PROTOCOL+"://"+getDomain()+":"+getPort()+"/"+getDir()+"/"+file;
-		
+	public Boolean getAutoconfig() {
+		return sharedPref.getBoolean(AUTOCONFIG, true);	
+	}
+	
+	public String getWifiName(Context context) {
+
+		String ssid = "none";
+		WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+		WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+//		if (WifiInfo.getDetailedStateOf(wifiInfo.getSupplicantState()) == NetworkInfo.DetailedState.CONNECTED) {
+//			ssid = wifiInfo.getSSID();	}
+		return ssid;
 	}
 
+	// TZE  pokud jsem doma a telefon vidi domaci wifi kulisaci tak pouzit HTTP_PROTOCOL+"://192.168.111.1:8081/xml/,  
+	//jinak pouzit konfiguraci podle nastaveni 
+	
+	public String constructUrl(String file) {
+		String result;
+	/*	if (getWifiName() == "kulisaci") {
+			result = HTTP_PROTOCOL+"://192.168.111.1:8081/xml/"+file;
+			}
+		else {
+	*/			result = HTTP_PROTOCOL+"://"+getDomain()+":"+getPort()+"/"+getDir()+"/"+file;
+	//		}
+		
+		return result;
+	}
 }

@@ -13,10 +13,15 @@
     
     <string name="title_control">Ovladani</string>
     <string name="title_status">Status</string>    
-    <string name="title_zaluzie">Zaluzie</string>
-    <string name="title_waterlevel">Destova jimka</string>
+    <string name="title_zaluzie">Switches</string>
+    <string name="title_waterlevel">Data</string>
     <string name="title_temperature">Teplota</string>
-
+    <string name="title_data">Data</string>
+    <string name="title_sauna">Sauna</string>
+    <string name="title_graph">Graph</string>
+    <string name="title_list">List</string>
+    
+    <string name="home_ssid">kulisaci</string>
     <string name="domain">Domain</string>
     <string name="port">Port</string>
     <string name="dir">Dir</string>

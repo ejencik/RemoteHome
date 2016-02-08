@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.Toast;
-
+import android.widget.Switch;
 import java.io.IOException;
 
 import zbynek.remotehouseholdcontrol.nettools.CgiScriptCaller;
@@ -31,56 +31,53 @@ public class ControlFragment extends Fragment {
 
     	    ImageButton garazBt = (ImageButton)v.findViewById(R.id.imageButtonGaraz);
     	    garazBt.setOnClickListener(listener);
-		    return v;
+
+    	    ImageButton bellBt = (ImageButton)v.findViewById(R.id.imageButtonBell);
+    	    bellBt.setOnClickListener(listener);
+
+    	    Switch sprinklerSw = (Switch)v.findViewById(R.id.sprinklerswitch);
+    	    sprinklerSw.setOnClickListener(listener);
+
+    	    return v;
 		    }
-	
+
 	ImageButton.OnClickListener listener = new ImageButton.OnClickListener()
 	{
 		@Override
-
+// TZE jak spustit callCGIScriptAndSetValue pro Switch
+		 
     public void onClick(View v) {
       cm = new ConnectionCredentialsManager(getActivity());
-			int rele_id=0;
+		    int rele_id=0;
 			switch (v.getId()) {
-			case  R.id.imageButtonVrata: 	{ rele_id=R.integer.rele_vrata; 	break;}
-			case  R.id.imageButtonBranka: 	{ rele_id=R.integer.rele_branka; 	break;}
-			case  R.id.imageButtonGaraz: 	{ rele_id=R.integer.rele_garaz; 	break;}
+			case  R.id.imageButtonVrata: 	{rele_id = getResources().getInteger(R.integer.rele_vrata); 	break;}
+			case  R.id.imageButtonBranka: 	{rele_id = getResources().getInteger(R.integer.rele_branka); 	break;}
+			case  R.id.imageButtonGaraz: 	{rele_id = getResources().getInteger(R.integer.rele_garaz); 	break;}
+			case  R.id.imageButtonBell: 	{rele_id = getResources().getInteger(R.integer.rele_bell); 		break;}
 			}
 			
-			//Toast.makeText(getActivity(),rele_id, Toast.LENGTH_LONG).show();
-			
-			AsyncTask<Boolean, Void, Boolean> runPulseTask = new AsyncTask<Boolean, Void, Boolean>() {
+			AsyncTask< Integer, Void, Boolean> runPulseTask = new AsyncTask< Integer, Void, Boolean>() {
 				@Override
-				protected Boolean doInBackground(Boolean ... params) {
-					boolean isChecked = params[0];
+				protected Boolean doInBackground( Integer ... params) {
+					Integer device = params[0];
 					CgiScriptCaller scriptCaller = new CgiScriptCaller(cm);
-			//	Toast.makeText(getActivity(),"Point 2", Toast.LENGTH_LONG).show();	
 					try {
-						return scriptCaller.callCGIScriptPulse(1);
-						//success = scriptCaller.callCGIScriptAndSetValue(isChecked);
-						//if (!success) {throw new IOException("Script failed.");}
+						return scriptCaller.callCGIScriptPulse(device);
 					} catch (IOException e) {
 											return false;
 											}
 				}
 			};
-			
-
-			
 			boolean result;
 			try {
-			//	Toast.makeText(getActivity(),"Point 1", Toast.LENGTH_LONG).show();	
-				
-				result = runPulseTask.execute(true).get();
-        Toast.makeText(getActivity(), "CgiScriptCaller result: " + result,
-          Toast.LENGTH_LONG).show();
-			} catch (Exception e) { //collect all possible exceptions
+				result = runPulseTask.execute(rele_id).get();
+				if (!result) {   
+	   				Toast.makeText(getActivity(), "CgiScriptCaller result: " + result, Toast.LENGTH_LONG).show();
+	   			}
+   			} catch (Exception e) { //collect all possible exceptions
 				Toast.makeText(getActivity(),"Exception PulseTask", Toast.LENGTH_LONG).show();					
 				result = false;
 			}
-				
-			}
-		
-	};	
-	
+			}		
+	};		
 }

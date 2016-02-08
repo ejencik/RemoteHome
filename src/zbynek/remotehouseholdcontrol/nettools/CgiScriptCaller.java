@@ -1,95 +1,116 @@
 package zbynek.remotehouseholdcontrol.nettools;
 
 import java.io.IOException;
+import zbynek.remotehouseholdcontrol.nettools.ConnectionCredentialsManager;
+import android.support.v4.util.SimpleArrayMap;
+import zbynek.remotehouseholdcontrol.Data;
 
-import android.os.AsyncTask;
+/*import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.util.SimpleArrayMap;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import android.widget.TextView;
+import android.widget.ToggleButton;
+import android.widget.Toast;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
+import android.widget.LinearLayout;
+import java.io.IOException;
+import java.util.Calendar; */
+import 	java.util.Random;
 
 import zbynek.remotehouseholdcontrol.nettools.CgiScriptCaller;
-import zbynek.remotehouseholdcontrol.nettools.ConnectionCredentialsManager;
+//import zbynek.remotehouseholdcontrol.nettools.ConnectionCredentialsManager;
+
 
 public class CgiScriptCaller {
 
-	
 	ConnectionCredentialsManager cm;
-	String scriptName;	
 	String scriptNamePulse;
 	String scriptNameSwitch;
+	String scriptNameStatus;	
+	String scriptNameGraph;	
 	
 	public CgiScriptCaller(ConnectionCredentialsManager cm) {
 		this.cm = cm;
-	//	this.scriptName = scriptName;
-		this.scriptName = "heating.cgi";
-		this.scriptNamePulse = "pulse.cgi";
-		this.scriptNamePulse = "switch.cgi";
+		this.scriptNamePulse 	= "pulse.cgi";
+		this.scriptNameSwitch 	= "switch.cgi";
+		this.scriptNameStatus 	= "status.cgi";
+		this.scriptNameGraph 	= "graph.cgi";
 	}
 	
-	
-	
+	public boolean GetRelayStatus(int rele_id) {
 
-	/**
-	 * Calls a CGI script pulse and returns true if it finished successfully (returns "0")
-	 */
-	public boolean callCGIScriptPulse(int Device) throws IOException {
-		String urlString = cm.constructUrl(scriptNamePulse) + "?device=" + Device;	
-		String scriptOutput = UrlReader.readOutputFromUrl(cm, urlString);
-    return scriptOutput != null && scriptOutput.contains("OK/");
-	}
-	/**
-	 * Calls a CGI script and returns true if it finished successfully (returns "0")
-	 * @param setOn set the script to ON or OFF status.
-	 */
-
-	public boolean callCGIScriptAndSetValue(boolean setOn) throws IOException {
-		String value = setOn ? "on" : "off";
-		String urlString = cm.constructUrl(scriptName) + "?value=" + value;	
-		String scriptOutput = UrlReader.readOutputFromUrl(cm, urlString);
-		return "OK".equals(scriptOutput.trim());
-	}
-	
-	/**
-	 * Calls a CGI script and returns actual status - ON (true) / OFF (false)
-	 */
-	public boolean callCGIScriptAndGetStatus() throws IOException {
-		String urlString = cm.constructUrl(scriptName) + "?value=status";	
-		String scriptOutput = UrlReader.readOutputFromUrl(cm, urlString);
-		if ("1".equals(scriptOutput.trim())) {
-			return true;
-		} else if ("0".equals(scriptOutput.trim())) {
+	    SimpleArrayMap<String, String> m = Data.get();
+	    if (m != null) {
+/*	    	String IOport = rele_id < 9 	? m.get(getString(R.string.P3))
+	    									: m.get(getString(R.string.P5));
+	    	int port_result = (IOport!=null) ? Integer.parseInt((IOport.trim()).toString()):1;
+			boolean rele_status = (port_result & rele_id) > 0 ? true : false;		
+	*/    }
+			return true; 
+		}
+	/**	 * refresh data with result of each CGI script 
+	 * @param device_id */
+	public static boolean refreshData(String statusesIO) 
+			throws IOException {
+		String valueParser 		= "/";
+		String valueDivider 	= ";";
+		String val_Status 		= "";
+		
+		SimpleArrayMap<String, String> m = new SimpleArrayMap<String, String>();
+		String[] values=statusesIO.split(valueParser);
+		for (int i = 0; i < values.length; i++){		
+			String[]  elements = values[i].split(valueDivider);		
+			if (elements[0].contains("Status"))   	val_Status 	= elements[1];
+			 if (elements[0] !=null && elements[1] !=null)	m.put(elements[0], elements[1]);
+		}
+		if (val_Status.contains("OK")) {
+			Data.setMap(m);
+			return true;} 
+		else 	
 			return false;
-		} else {
-			throw new IOException("Script returned an invalid status.");
-		}
 	}
-	
-	public boolean pokus(boolean isChecked) throws IOException {
-		AsyncTask<Boolean, Void, Boolean> setHeatingStatusTask = new AsyncTask<Boolean, Void, Boolean>() {
-			@Override
-			protected Boolean doInBackground(Boolean ... params) {
-				boolean isChecked = params[0];
-				CgiScriptCaller scriptCaller = new CgiScriptCaller(cm);
-				boolean success;
-				try {
-					success = scriptCaller.callCGIScriptAndSetValue(isChecked);
-					if (!success) {throw new IOException("Script failed.");}
-				} catch (IOException e) {
-					return false;
-										}
-				return true;
-			}
-		};
-		boolean result;
-		try {
-			result = setHeatingStatusTask.execute(isChecked).get();
-		} catch (Exception e) { //collect all possible exceptions
-//			Toast.makeText(getActivity(),"Exception setHeating", Toast.LENGTH_LONG).show();					
-			result = false;
-		}
-		if (!result) {
-		//	showError("chybka 1");
-		//	button.setChecked(!isChecked); //set previous state
-		}
-		return result;
-	}
-	
 
+// randoms v url jsou pridany kvuli proxy sixx.org
+	/**	 * Calls a CGI script pulse and returns true if it finished successfully (returns "0") */
+	public boolean callCGIScriptPulse(int device_id) throws IOException {
+		Random r = new Random();
+		String urlString = cm.constructUrl(scriptNamePulse) + "?device=" + device_id+ "?random=" + r.nextInt(1000000);	
+		String scriptOutput = UrlReader.readOutputFromUrl(cm, urlString);
+	return	refreshData(scriptOutput);		
+  	}
+
+	/**	 * Calls a CGI script and returns true if it finished successfully (returns "0")	 * @param setOn set the script to ON or OFF status. */
+	public boolean callCGIScriptAndSetValue(boolean setOn, int device_id) throws IOException {
+		Random r = new Random();
+		String value = setOn ? "1" : "0";
+		String urlString = cm.constructUrl(scriptNameSwitch) + "?value=" + value+ "?device=" + device_id + "?random=" + r.nextInt(1000000);	
+		String scriptOutput = UrlReader.readOutputFromUrl(cm, urlString);
+		return	refreshData(scriptOutput);		
+  	}
+	
+	/**	 * Calls a CGI script and returns actual status - ON (true) / OFF (false)*/
+	public boolean callCGIScriptAndGetStatus(int device_id) throws IOException {
+		Random r = new Random();
+		String urlString = cm.constructUrl(scriptNameStatus+ "?random=" + r.nextInt(1000000));	
+		String scriptOutput = UrlReader.readOutputFromUrl(cm, urlString);
+		refreshData(scriptOutput);
+		return refreshData(scriptOutput);
+	}
+
+	/**	 * Calls a CGI script and returns data for graph*/
+	public String callCGIScriptAndGetGraphData(int sensor_id) throws IOException {
+		Random r = new Random();
+		String urlString = cm.constructUrl(scriptNameGraph) + "?device=" + sensor_id+ "?random=" + r.nextInt(1000000);		
+		String scriptOutput = UrlReader.readOutputFromUrl(cm, urlString);
+		return scriptOutput;
+	}
 }

@@ -5,10 +5,11 @@
     android:layout_gravity="right"
     android:background="@color/black">
 
-    <TextView android:id="@+id/row_refresh_date"
+
+    <TextView 
+    android:id="@+id/row_refresh_date"
     android:textSize="12sp"
     android:textColor="#c0caff"
-    android:textAlignment="viewEnd"
     android:layout_gravity="right"
     android:textStyle="italic"
     android:layout_width="match_parent"
