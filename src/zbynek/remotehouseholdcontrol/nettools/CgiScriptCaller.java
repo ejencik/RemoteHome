@@ -5,30 +5,9 @@ import zbynek.remotehouseholdcontrol.nettools.ConnectionCredentialsManager;
 import android.support.v4.util.SimpleArrayMap;
 import zbynek.remotehouseholdcontrol.Data;
 
-/*import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.util.SimpleArrayMap;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import android.widget.TextView;
-import android.widget.ToggleButton;
-import android.widget.Toast;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.drawable.BitmapDrawable;
-import android.widget.LinearLayout;
-import java.io.IOException;
-import java.util.Calendar; */
 import 	java.util.Random;
 
 import zbynek.remotehouseholdcontrol.nettools.CgiScriptCaller;
-//import zbynek.remotehouseholdcontrol.nettools.ConnectionCredentialsManager;
-
 
 public class CgiScriptCaller {
 

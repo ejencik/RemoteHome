@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiInfo;
+import android.net.NetworkInfo;
+import android.net.NetworkInfo.DetailedState;
 
 
 import java.lang.Enum;
@@ -67,12 +69,11 @@ public class ConnectionCredentialsManager {
 	}
 	
 	public String getWifiName(Context context) {
-
 		String ssid = "none";
 		WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 		WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-//		if (WifiInfo.getDetailedStateOf(wifiInfo.getSupplicantState()) == NetworkInfo.DetailedState.CONNECTED) {
-//			ssid = wifiInfo.getSSID();	}
+		if (WifiInfo.getDetailedStateOf(wifiInfo.getSupplicantState()) 	== NetworkInfo.DetailedState.CONNECTED) {
+			ssid = wifiInfo.getSSID();	}
 		return ssid;
 	}
 
@@ -81,13 +82,12 @@ public class ConnectionCredentialsManager {
 	
 	public String constructUrl(String file) {
 		String result;
-	/*	if (getWifiName() == "kulisaci") {
+		result = HTTP_PROTOCOL+"://"+getDomain()+":"+getPort()+"/"+getDir()+"/"+file;		
+/*
+		if (getWifiName() == "kulisaci") {
 			result = HTTP_PROTOCOL+"://192.168.111.1:8081/xml/"+file;
 			}
-		else {
-	*/			result = HTTP_PROTOCOL+"://"+getDomain()+":"+getPort()+"/"+getDir()+"/"+file;
-	//		}
-		
+		*/
 		return result;
 	}
 }

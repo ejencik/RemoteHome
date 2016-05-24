@@ -25,17 +25,34 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="171dp"
+        android:layout_height="90dp"
         android:gravity="center_horizontal|center_vertical"
         android:orientation="horizontal" >
 
         <ToggleButton
             android:id="@+id/toggleButtonSauna"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="wrap_content"
+            android:layout_height="63dp"
             android:text="ToggleButton" />
-    </LinearLayout>
 
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:orientation="horizontal" >
+
+        <ImageButton
+            android:id="@+id/imageButton1"
+            android:layout_width="91dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.03"
+            android:background="@color/black"
+            android:src="@drawable/graph" />
+
+    </LinearLayout>
+    
     <LinearLayout
         android:id="@+id/my_tarif_graf"
         android:layout_width="match_parent"

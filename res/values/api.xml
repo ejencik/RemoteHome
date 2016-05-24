@@ -5,7 +5,7 @@
   <string name="env_boiler">INF_Boiler</string>  
   <string name="env_kotel">INF_Kotel</string>  
   <string name="env_tarif">INF_TM_tarif</string>
-  <string name="temp_sauna">NP2_Chodba</string>  
+  <string name="temp_sauna">INF_Sauna</string>  
   <string name="HDO">HDO</string>  
   <string name="env_house_armed">INF_Dum_armed</string>
   <string name="inf_kotel_voda">INF_Kotel_voda</string>
