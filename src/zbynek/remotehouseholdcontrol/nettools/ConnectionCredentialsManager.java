@@ -1,15 +1,12 @@
 package zbynek.remotehouseholdcontrol.nettools;
 
-import android.R;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.wifi.WifiManager;
-import android.net.wifi.WifiInfo;
-import android.net.NetworkInfo;
 import android.net.NetworkInfo.DetailedState;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 
-
-import java.lang.Enum;
+import zbynek.remotehouseholdcontrol.R;
 
 
 public class ConnectionCredentialsManager {
@@ -25,8 +22,10 @@ public class ConnectionCredentialsManager {
 
 
 	private SharedPreferences sharedPref;
+  private final Context context;
 	
 	public ConnectionCredentialsManager(Context context) {
+    this.context = context;
 		sharedPref = context.getSharedPreferences("ConnectionPreferences", Context.MODE_PRIVATE);
 	}
 	
@@ -68,12 +67,13 @@ public class ConnectionCredentialsManager {
 		return sharedPref.getBoolean(AUTOCONFIG, true);	
 	}
 	
-	public String getWifiName(Context context) {
+	public String getWifiName() {
 		String ssid = "none";
 		WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 		WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-		if (WifiInfo.getDetailedStateOf(wifiInfo.getSupplicantState()) 	== NetworkInfo.DetailedState.CONNECTED) {
-			ssid = wifiInfo.getSSID();	}
+		if (DetailedState.CONNECTED.equals(WifiInfo.getDetailedStateOf(
+      wifiInfo.getSupplicantState())))
+			ssid = wifiInfo.getSSID();
 		return ssid;
 	}
 
@@ -81,13 +81,8 @@ public class ConnectionCredentialsManager {
 	//jinak pouzit konfiguraci podle nastaveni 
 	
 	public String constructUrl(String file) {
-		String result;
-		result = HTTP_PROTOCOL+"://"+getDomain()+":"+getPort()+"/"+getDir()+"/"+file;		
-/*
-		if (getWifiName() == "kulisaci") {
-			result = HTTP_PROTOCOL+"://192.168.111.1:8081/xml/"+file;
-			}
-		*/
-		return result;
+    if (context.getString(R.string.ssid_home).equals(getWifiName()))
+      return context.getString(R.string.url_internal) + file;
+		return HTTP_PROTOCOL+"://"+getDomain()+":"+getPort()+"/"+getDir()+"/"+file;
 	}
 }
