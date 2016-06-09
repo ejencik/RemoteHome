@@ -78,18 +78,19 @@ public class SaunaFragment extends Fragment {
             canvas.drawRect(0, belt_y1, tarif_width,belt_y2, paint); 
 
 // draw HDO intervals
-	     	String string_HDO = m.get(getString(R.string.HDO));
-            String[] interval_HDO = string_HDO.split("#");
-     
-            for (int i=0; i <interval_HDO.length; i++) {
-            //	System.out.println("interval_HDO[i] "+interval_HDO[i]);
-               	String[] time_HDO = interval_HDO[i].split("-");	
-            	Float begin_HDO	= Float.parseFloat(time_HDO[0].trim())*tarif_part;	
-            	Float end_HDO	= Float.parseFloat(time_HDO[1].trim())*tarif_part;	
-            	paint.setColor(Color.parseColor("#cceae7"));
-            	canvas.drawRect(begin_HDO, belt_y1, end_HDO, belt_y2, paint); 
-            }
-            
+    if (m != null) {
+      String string_HDO = m.get(getString(R.string.HDO));
+      if (string_HDO != null) {
+        for (String interval_HDO : string_HDO.split("#")) {
+          String[] time_HDO = interval_HDO.split("-");
+          Float begin_HDO = Float.parseFloat(time_HDO[0].trim()) * tarif_part;
+          Float end_HDO = Float.parseFloat(time_HDO[1].trim()) * tarif_part;
+          paint.setColor(Color.parseColor("#cceae7"));
+          canvas.drawRect(begin_HDO, belt_y1, end_HDO, belt_y2, paint);
+        }
+      }
+    }
+
 // draw actual time
             Calendar cal = Calendar.getInstance(); 
             float minute = cal.get(Calendar.MINUTE);
