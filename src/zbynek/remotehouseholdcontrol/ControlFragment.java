@@ -6,9 +6,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageButton;
-import android.widget.Toast;
 import android.widget.Switch;
+import android.widget.Toast;
+
 import java.io.IOException;
 
 import zbynek.remotehouseholdcontrol.nettools.CgiScriptCaller;
@@ -36,7 +39,7 @@ public class ControlFragment extends Fragment {
     	    bellBt.setOnClickListener(listener);
 
     	    Switch sprinklerSw = (Switch)v.findViewById(R.id.sprinklerswitch);
-    	    sprinklerSw.setOnClickListener(listener);
+    	    sprinklerSw.setOnCheckedChangeListener(changeListener);
 
     	    return v;
 		    }
@@ -58,7 +61,7 @@ public class ControlFragment extends Fragment {
 			
 			AsyncTask< Integer, Void, Boolean> runPulseTask = new AsyncTask< Integer, Void, Boolean>() {
 				@Override
-				protected Boolean doInBackground( Integer ... params) {
+				protected Boolean doInBackground(Integer ... params) {
 					Integer device = params[0];
 					CgiScriptCaller scriptCaller = new CgiScriptCaller(cm);
 					try {
@@ -79,5 +82,32 @@ public class ControlFragment extends Fragment {
 				result = false;
 			}
 			}		
-	};		
+	};
+
+  OnCheckedChangeListener changeListener = new OnCheckedChangeListener() {
+    @Override
+    public void onCheckedChanged(CompoundButton v, final boolean isChecked) {
+      AsyncTask<Integer, Void, Boolean> t = new AsyncTask<Integer, Void, Boolean>() {
+        @Override
+        protected Boolean doInBackground(Integer... params) {
+          Integer device = params[0];
+          CgiScriptCaller sc = new CgiScriptCaller(
+            new ConnectionCredentialsManager(getActivity()
+              .getApplicationContext()));
+          try {
+            return sc.callCGIScriptAndSetValue(isChecked, device);
+          } catch (IOException e) {
+            return false;
+          }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean res) {
+          Toast.makeText(getActivity(), "CgiScriptCaller result: " + res,
+            Toast.LENGTH_LONG).show();
+        }
+      };
+      t.execute(getResources().getInteger(R.integer.rele_bell));
+    }
+  };
 }
